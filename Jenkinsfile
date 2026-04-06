@@ -2,48 +2,38 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_USERNAME = "boomika1030"
-        IMAGE_NAME = "online-book-store"
-        IMAGE_TAG = "latest"
+        IMAGE_NAME = "boomika1030/airline:latest"
     }
 
     stages {
 
         stage('Clone') {
             steps {
-                checkout scm
+                git 'https://github.com/Gokulkrishna02/Kubernetes.git'
             }
         }
 
-        stage('Install') {
+        stage('Build Docker Image') {
             steps {
-                bat 'npm install'
-            }
-        }
-
-        stage('Build Docker') {
-            steps {
-                bat 'docker build -t %DOCKER_USERNAME%/%IMAGE_NAME%:%IMAGE_TAG% .'
+                bat "docker build -t %IMAGE_NAME% ."
             }
         }
 
         stage('Login DockerHub') {
             steps {
-                script {
-                    withCredentials([usernamePassword(
-                        credentialsId: 'dockerhub-cred',
-                        usernameVariable: 'USER',
-                        passwordVariable: 'PASS'
-                    )]) {
-                        bat 'echo %PASS% | docker login -u %USER% --password-stdin'
-                    }
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'USER',
+                    passwordVariable: 'PASS'
+                )]) {
+                    bat 'echo %PASS% | docker login -u %USER% --password-stdin'
                 }
             }
         }
 
         stage('Push Image') {
             steps {
-                bat 'docker push %DOCKER_USERNAME%/%IMAGE_NAME%:%IMAGE_TAG%'
+                bat "docker push %IMAGE_NAME%"
             }
         }
     }
