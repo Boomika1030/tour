@@ -1,0 +1,93 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2>Admin Panel</h2>
+
+<div style="margin-bottom: 2rem; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <h3>Add New Tourist Place</h3>
+    <form method="POST">
+        <input type="hidden" name="action" value="add_place">
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" name="name" required>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="description" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <label>Price ($)</label>
+            <input type="number" step="0.01" name="price" required>
+        </div>
+        <div class="form-group">
+            <label>Image URL</label>
+            <input type="url" name="image_url" placeholder="https://...">
+        </div>
+        <button type="submit" class="btn">Add Place</button>
+    </form>
+</div>
+
+<h3>Manage Places</h3>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in places %}
+        <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.name }}</td>
+            <td>${{ "%.2f"|format(p.price) }}</td>
+            <td>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="action" value="delete_place">
+                    <input type="hidden" name="place_id" value="{{ p.id }}">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>All Bookings</h3>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Place</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for b in bookings %}
+        <tr>
+            <td>{{ b.id }}</td>
+            <td>{{ b.username }}</td>
+            <td>{{ b.name }}</td>
+            <td>{{ b.booking_date }}</td>
+            <td>
+                <form method="POST" style="display:flex; gap:0.5rem;">
+                    <input type="hidden" name="action" value="update_booking">
+                    <input type="hidden" name="booking_id" value="{{ b.id }}">
+                    <select name="status">
+                        <option value="Pending Payment" {% if b.status == 'Pending Payment' %}selected{% endif %}>Pending Payment</option>
+                        <option value="Confirmed" {% if b.status == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+                        <option value="Cancelled" {% if b.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                    <button type="submit" class="btn" style="padding: 0.2rem 0.5rem; font-size: 0.9rem;">Update</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

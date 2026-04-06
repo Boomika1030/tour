@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <h2>Payment Simulator</h2>
+    <p>Complete your booking for <strong>{{ booking.name }}</strong></p>
+    <p>Date: {{ booking.booking_date }}</p>
+    <h3 class="price">Total Amount: ${{ "%.2f"|format(booking.price) }}</h3>
+    
+    <hr style="margin: 1.5rem 0;">
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="card_name">Name on Card</label>
+            <input type="text" id="card_name" required>
+        </div>
+        <div class="form-group">
+            <label for="card_number">Card Number</label>
+            <input type="text" id="card_number" placeholder="XXXX XXXX XXXX XXXX" required>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1;">
+                <label for="expiry">Expiry</label>
+                <input type="text" id="expiry" placeholder="MM/YY" required>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" placeholder="123" required>
+            </div>
+        </div>
+        <button type="submit" class="btn" style="width: 100%; background: #28a745;">Pay Now</button>
+    </form>
+    <p style="font-size: 0.8rem; color: #666; margin-top: 1rem; text-align: center;">
+        *This is a demo project. Do not enter real credit card details. Any input will simulate a successful payment.
+    </p>
+</div>
+{% endblock %}
