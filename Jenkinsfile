@@ -9,7 +9,7 @@ pipeline {
 
         stage('Clone') {
             steps {
-                git 'https://github.com/Boomika1030/tour.git'
+                git branch: 'master', url: 'https://github.com/Boomika1030/tour.git'
             }
         }
 
