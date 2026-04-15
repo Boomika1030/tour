@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tourist-system
+  name: online-book-store
 
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: tourist-system
+      app: online-book-store
 
   template:
     metadata:
       labels:
-        app: tourist-system
+        app: online-book-store
 
     spec:
       containers:
-      - name: tourist-system
-        image: tourist-system:latest
-        imagePullPolicy: Never   # 🔥 important
+      - name: online-book-store
+        image: online-book-store:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
 
@@ -26,13 +26,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tourist-system-service
+  name: online-book-store-service
 
 spec:
   type: NodePort
   selector:
-    app: tourist-system
+    app: online-book-store
 
   ports:
   - port: 80
     targetPort: 3000
+    nodePort: 30007
