@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <h2>Book Package: {{ place.name }}</h2>
+    <img src="{{ place.image_url }}" alt="{{ place.name }}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 4px; margin-bottom: 1rem;">
+    
+    <p><strong>Description:</strong> {{ place.description }}</p>
+    <p class="price">Price: ${{ "%.2f"|format(place.price) }}</p>
+    
+    <hr style="margin: 1.5rem 0;">
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="date">Select Booking Date:</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">Proceed to Payment</button>
+    </form>
+</div>
+
+<script>
+    // Simple script to set minimum date to today
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById("date").setAttribute('min', today);
+</script>
+{% endblock %}
